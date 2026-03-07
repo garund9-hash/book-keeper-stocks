@@ -1,4 +1,4 @@
-# PLAN.md — 주식 가계부 SPA
+`# PLAN.md — 주식 가계부 SPA
 
 ## Summary of Changes
 
