@@ -3,12 +3,12 @@ import { SECTORS, SECTOR_COLORS, tdStyle, smallBtn } from '../../utils/constants
 import { formatKRW } from '../../utils/formatters'
 import { SectorBadge } from '../ui/SectorBadge'
 
-export function PortfolioTab({ stocks, filterSector, setFilterSector, onEdit, onDelete }) {
+export function PortfolioTab({ stocks, filterSector, setFilterSector, onEdit, onDelete, calculateTotalInvestment }) {
     const filtered = filterSector === '전체'
         ? stocks
         : stocks.filter(s => s.sector === filterSector)
 
-    const totalInvestment = filtered.reduce((sum, s) => sum + s.pricePerShare * s.quantity, 0)
+    const totalInvestment = calculateTotalInvestment(filtered)
 
     return (
         <div>

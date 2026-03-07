@@ -6,7 +6,7 @@ import {
 import { SECTOR_COLORS, cardStyle, cardTitle } from '../../utils/constants'
 import { formatKRW } from '../../utils/formatters'
 
-export function ChartTab({ stocks }) {
+export function ChartTab({ stocks, getSectorAggregations }) {
     if (stocks.length === 0) {
         return (
             <div style={{ color: '#4a4a6a', textAlign: 'center', padding: '80px 0', fontSize: 15 }}>
@@ -15,15 +15,7 @@ export function ChartTab({ stocks }) {
         )
     }
 
-    const sectorMap = {}
-    stocks.forEach(s => {
-        if (!sectorMap[s.sector]) sectorMap[s.sector] = { sector: s.sector, total: 0, count: 0 }
-        sectorMap[s.sector].total += s.pricePerShare * s.quantity
-        sectorMap[s.sector].count += 1
-    })
-    const chartData = Object.values(sectorMap).sort((a, b) => b.total - a.total)
-    const grandTotal = chartData.reduce((sum, d) => sum + d.total, 0)
-    const pieData = chartData.map(d => ({ ...d, percent: ((d.total / grandTotal) * 100).toFixed(1) }))
+    const { chartData, pieData } = getSectorAggregations()
 
     const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
         const RADIAN = Math.PI / 180

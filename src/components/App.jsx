@@ -6,13 +6,12 @@ import { AddStockTab } from './tabs/AddStockTab'
 import { ChartTab } from './tabs/ChartTab'
 import { AIChatTab } from './tabs/AIChatTab'
 import { DeleteModal } from './ui/DeleteModal'
+import { Header } from './ui/Header'
 
 export default function App() {
-    const { stocks, addOrUpdateStock, removeStock } = usePortfolio()
+    const { stocks, addStock, updateStock, removeStock, calculateTotalInvestment, getSectorAggregations } = usePortfolio()
     const [activeTab, setActiveTab] = useState('portfolio')
     const [apiKey, setApiKey] = useState(() => localStorage.getItem('geminiApiKey') || '')
-    const [showApiKey, setShowApiKey] = useState(false)
-    const [apiKeyInput, setApiKeyInput] = useState(apiKey)
     const [filterSector, setFilterSector] = useState('전체')
     const [chatMessages, setChatMessages] = useState([])
     const [chatInput, setChatInput] = useState('')
@@ -21,10 +20,9 @@ export default function App() {
     const [deleteTarget, setDeleteTarget] = useState(null)
     const [isChatLoading, setIsChatLoading] = useState(false)
 
-    const handleSaveApiKey = () => {
-        setApiKey(apiKeyInput)
-        localStorage.setItem('geminiApiKey', apiKeyInput)
-        setShowApiKey(false)
+    const handleSaveApiKey = (newKey) => {
+        setApiKey(newKey)
+        localStorage.setItem('geminiApiKey', newKey)
     }
 
     const handleEdit = (stock) => {
@@ -52,7 +50,7 @@ export default function App() {
     const handleSave = () => {
         if (!formData.name || !formData.buyDate || !formData.pricePerShare || !formData.quantity) return
 
-        addOrUpdateStock({
+        const newStock = {
             id: editingId,
             sector: formData.sector,
             name: formData.name,
@@ -60,7 +58,13 @@ export default function App() {
             pricePerShare: Number(formData.pricePerShare),
             quantity: Number(formData.quantity),
             memo: formData.memo,
-        })
+        }
+
+        if (editingId) {
+            updateStock(newStock)
+        } else {
+            addStock(newStock)
+        }
 
         setFormData({ ...EMPTY_FORM })
         setEditingId(null)
@@ -80,70 +84,7 @@ export default function App() {
             color: '#e2e8f0',
             fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
         }}>
-            {/* 헤더 */}
-            <div style={{
-                background: '#1a1a2e',
-                borderBottom: '1px solid #2a2a3e',
-                padding: '0 24px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                height: 60,
-                position: 'sticky',
-                top: 0,
-                zIndex: 100,
-            }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#6366f1' }}>
-                    📈 주식 가계부
-                </div>
-
-                {/* API Key */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    {showApiKey && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                            <input
-                                type="password"
-                                placeholder="Gemini API Key"
-                                value={apiKeyInput}
-                                onChange={e => setApiKeyInput(e.target.value)}
-                                onKeyDown={e => e.key === 'Enter' && handleSaveApiKey()}
-                                style={{
-                                    ...inputStyle,
-                                    width: 220,
-                                    padding: '6px 12px',
-                                    fontSize: 13,
-                                }}
-                            />
-                            <button onClick={handleSaveApiKey} style={{
-                                padding: '6px 14px',
-                                background: '#6366f1',
-                                color: '#fff',
-                                border: 'none',
-                                borderRadius: 6,
-                                fontSize: 13,
-                                cursor: 'pointer',
-                            }}>저장</button>
-                        </div>
-                    )}
-                    <button
-                        onClick={() => setShowApiKey(v => !v)}
-                        style={{
-                            background: 'transparent',
-                            border: '1px solid #4a4a6a',
-                            borderRadius: 8,
-                            color: apiKey ? '#34d399' : '#a0aec0',
-                            padding: '6px 14px',
-                            cursor: 'pointer',
-                            fontSize: 13,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 6,
-                        }}
-                    >
-                        🔑 API Key {apiKey ? <span style={{ fontSize: 11, letterSpacing: 2 }}>••••</span> : ''}
-                    </button>
-                </div>
-            </div>
+            <Header apiKey={apiKey} onSaveApiKey={handleSaveApiKey} />
 
             {/* 탭 바 */}
             <div style={{
@@ -183,6 +124,7 @@ export default function App() {
                         setFilterSector={setFilterSector}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
+                        calculateTotalInvestment={calculateTotalInvestment}
                     />
                 )}
                 {activeTab === 'add' && (
@@ -195,7 +137,7 @@ export default function App() {
                     />
                 )}
                 {activeTab === 'chart' && (
-                    <ChartTab stocks={stocks} />
+                    <ChartTab stocks={stocks} getSectorAggregations={getSectorAggregations} />
                 )}
                 {activeTab === 'ai' && (
                     <AIChatTab
