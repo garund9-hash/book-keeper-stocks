@@ -11,7 +11,7 @@ import { Header } from './ui/Header'
 export default function App() {
     const { stocks, addStock, updateStock, removeStock, calculateTotalInvestment, getSectorAggregations } = usePortfolio()
     const [activeTab, setActiveTab] = useState('portfolio')
-    const [apiKey, setApiKey] = useState(() => localStorage.getItem('geminiApiKey') || '')
+    const [apiKey, setApiKey] = useState(() => sessionStorage.getItem('geminiApiKey') || '')
     const [filterSector, setFilterSector] = useState('전체')
     const [chatMessages, setChatMessages] = useState([])
     const [chatInput, setChatInput] = useState('')
@@ -22,7 +22,7 @@ export default function App() {
 
     const handleSaveApiKey = (newKey) => {
         setApiKey(newKey)
-        localStorage.setItem('geminiApiKey', newKey)
+        sessionStorage.setItem('geminiApiKey', newKey)
     }
 
     const handleEdit = (stock) => {

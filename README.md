@@ -41,7 +41,7 @@ npm run dev
 ## Gemini API Key 설정
 
 헤더 우측 **🔑 API Key** 버튼 클릭 → API Key 입력 → 저장.
-키는 브라우저 localStorage에만 보관되며 외부로 전송되지 않습니다.
+키는 브라우저 sessionStorage에만 보관되며 창을 닫으면 초기화됩니다. 외부로 전송되지 않습니다.
 
 Gemini API Key 발급: https://aistudio.google.com/app/apikey
 
