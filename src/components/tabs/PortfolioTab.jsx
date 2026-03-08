@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { SECTORS, SECTOR_COLORS, tdStyle, smallBtn } from '../../utils/constants'
 import { formatKRW } from '../../utils/formatters'
 import { SectorBadge } from '../ui/SectorBadge'
 
 export function PortfolioTab({ stocks, filterSector, setFilterSector, onEdit, onDelete, calculateTotalInvestment }) {
-    const filtered = filterSector === '전체'
-        ? stocks
-        : stocks.filter(s => s.sector === filterSector)
+    const filtered = useMemo(() => {
+        return filterSector === '전체'
+            ? stocks
+            : stocks.filter(s => s.sector === filterSector)
+    }, [stocks, filterSector])
 
-    const totalInvestment = calculateTotalInvestment(filtered)
+    const totalInvestment = useMemo(() => calculateTotalInvestment(filtered), [filtered, calculateTotalInvestment])
 
     return (
         <div>

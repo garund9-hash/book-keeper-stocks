@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useCallback } from 'react'
 import {
     PieChart, Pie, Cell, Tooltip, Legend,
     BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer
@@ -15,9 +15,9 @@ export function ChartTab({ stocks, getSectorAggregations }) {
         )
     }
 
-    const { chartData, pieData } = getSectorAggregations()
+    const { chartData, pieData } = useMemo(() => getSectorAggregations(), [getSectorAggregations])
 
-    const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+    const renderCustomLabel = useCallback(({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
         const RADIAN = Math.PI / 180
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5
         const x = cx + radius * Math.cos(-midAngle * RADIAN)
@@ -28,7 +28,7 @@ export function ChartTab({ stocks, getSectorAggregations }) {
                 {`${parseFloat(percent * 100).toFixed(0)}%`}
             </text>
         )
-    }
+    }, [])
 
     return (
         <div>
