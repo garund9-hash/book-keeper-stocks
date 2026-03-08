@@ -23,7 +23,7 @@ export function ChartTab({ stocks }) {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5
         const x = cx + radius * Math.cos(-midAngle * RADIAN)
         const y = cy + radius * Math.sin(-midAngle * RADIAN)
-        if (parseFloat(percent) < 3) return null
+        if (percent < 0.03) return null
         return (
             <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={12} fontWeight={700}>
                 {`${parseFloat(percent * 100).toFixed(0)}%`}
@@ -112,7 +112,7 @@ export function ChartTab({ stocks }) {
                         <div style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', margin: '4px 0' }}>
                             {formatKRW(d.total)}
                         </div>
-                        <div style={{ fontSize: 13, color: '#6366f1' }}>{d.percent}%</div>
+                        <div style={{ fontSize: 13, color: '#6366f1' }}>{d.pct}%</div>
                     </div>
                 ))}
             </div>

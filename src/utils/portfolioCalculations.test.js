@@ -46,10 +46,10 @@ describe('Portfolio Calculations', () => {
             expect(finance.total).toBe(10000)
 
             const techPie = result.pieData.find(d => d.sector === '기술')
-            expect(techPie.percent).toBe('66.7')
+            expect(techPie.pct).toBe('66.7')
 
             const financePie = result.pieData.find(d => d.sector === '금융')
-            expect(financePie.percent).toBe('33.3')
+            expect(financePie.pct).toBe('33.3')
         })
 
         it('handles an empty portfolio safely', () => {

@@ -11,6 +11,6 @@ export const getSectorAggregations = (stocks) => {
     })
     const chartData = Object.values(sectorMap).sort((a, b) => b.total - a.total)
     const grandTotal = chartData.reduce((sum, d) => sum + d.total, 0)
-    const pieData = chartData.map(d => ({ ...d, percent: ((d.total / grandTotal) * 100).toFixed(1) }))
+    const pieData = chartData.map(d => ({ ...d, pct: ((d.total / grandTotal) * 100).toFixed(1) }))
     return { chartData, pieData }
 }
