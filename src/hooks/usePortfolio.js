@@ -35,5 +35,5 @@ export function usePortfolio() {
     const calcTotal = useCallback((list) => calculateTotalInvestment(list), [])
     const getAggregations = useCallback(() => getSectorAggregations(stocks), [stocks])
 
-    return { stocks, setStocks, addStock, updateStock, removeStock, calculateTotalInvestment: calcTotal, getSectorAggregations: getAggregations }
+    return { stocks, setStocks, addStock, updateStock, removeStock, calculateTotalInvestment: calcTotal, getSectorAggregations }
 }

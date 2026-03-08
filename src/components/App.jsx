@@ -137,7 +137,7 @@ export default function App() {
                     />
                 )}
                 {activeTab === 'chart' && (
-                    <ChartTab stocks={stocks} getSectorAggregations={getSectorAggregations} />
+                    <ChartTab stocks={stocks} />
                 )}
                 {activeTab === 'ai' && (
                     <AIChatTab

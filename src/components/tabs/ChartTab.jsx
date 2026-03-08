@@ -5,8 +5,9 @@ import {
 } from 'recharts'
 import { SECTOR_COLORS, cardStyle, cardTitle } from '../../utils/constants'
 import { formatKRW } from '../../utils/formatters'
+import { getSectorAggregations } from '../../utils/portfolioCalculations'
 
-export function ChartTab({ stocks, getSectorAggregations }) {
+export function ChartTab({ stocks }) {
     if (stocks.length === 0) {
         return (
             <div style={{ color: '#4a4a6a', textAlign: 'center', padding: '80px 0', fontSize: 15 }}>
@@ -15,7 +16,7 @@ export function ChartTab({ stocks, getSectorAggregations }) {
         )
     }
 
-    const { chartData, pieData } = useMemo(() => getSectorAggregations(), [getSectorAggregations])
+    const { chartData, pieData } = useMemo(() => getSectorAggregations(stocks), [stocks])
 
     const renderCustomLabel = useCallback(({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
         const RADIAN = Math.PI / 180

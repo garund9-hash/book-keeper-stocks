@@ -16,8 +16,7 @@ export function AIChatTab({ stocks, apiKey, chatMessages, setChatMessages, chatI
             return
         }
 
-        const newMessages = [...chatMessages, { role: 'user', content: userMsg }]
-        setChatMessages(newMessages)
+        setChatMessages(prev => [...prev, { role: 'user', content: userMsg }])
         setChatInput('')
         setIsChatLoading(true)
 
